@@ -3,7 +3,7 @@ name: deploy-backoffice-backend
 on:
   push:
     paths:
-      - backend/**
+      - backoffice-backend/**
   workflow_dispatch:
 
 permissions:
