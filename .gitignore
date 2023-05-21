@@ -43,7 +43,7 @@ secrets.yml
 gradle.properties
 
 # exlude gradle-wrapper.jar
-!/gradle/wrapper/gradle-wrapper.jar
+#!/gradle/wrapper/gradle-wrapper.jar
 
 node_modules
 .serverless

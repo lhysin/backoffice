@@ -1,4 +1,4 @@
-name: deploy-backoffice
+name: deploy-backoffice-backend
 
 on:
   push:
@@ -28,7 +28,7 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew bootJar
-        working-directory: backend
+        working-directory: backoffice-backend
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -45,11 +45,11 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          context: backend # subdirectory
-          file: backend/Dockerfile
+          context: backoffice-backend # subdirectory
+          file: backoffice-backend/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: lhysin/backoffice:latest
+          tags: lhysin/backoffice-backend:latest
 
   deploy:
     needs: build
@@ -62,12 +62,12 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            docker stop backoffice
+            docker stop backoffice-backend
             docker rm -f backoffice
-            docker pull lhysin/backoffice:latest
-            docker run -d -p 8880:8880 --name backoffice \
+            docker pull lhysin/backoffice-backend:latest
+            docker run -d -p 8880:8880 --name backoffice-backend \
             -e SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }} \
             -e SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }} \
             -e SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }} \
             -e SPRING_PROFILES_ACTIVE=prd \
-            lhysin/backoffice:latest
+            lhysin/backoffice-backend:latest
