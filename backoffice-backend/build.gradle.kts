@@ -35,6 +35,9 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
+    // datasource
+    implementation("mysql:mysql-connector-java:8.0.33")
+
     // logging and monitoring
     implementation("com.github.loki4j:loki-logback-appender:1.4.0")
     implementation("org.springframework.boot:spring-boot-starter-actuator")

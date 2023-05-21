@@ -1,19 +1,59 @@
+server:
+  port: 8880
+
 spring:
-  datasource:
-    url: jdbc:h2:mem:db1;MODE=MySql;DB_CLOSE_DELAY=-1
-    username: sa
-    password:
-    driverClassName: org.h2.Driver
   jpa:
     database: mysql
-    hibernate:
-      ddl-auto: create
     show-sql: true
-  h2:
-    console:
-      enabled: true
+
 logging:
   level:
     org.springframework.data: warn
     h2: debug
     io.backoffice: debug
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - info
+          - health
+          - metrics
+          - prometheus
+          - env
+          - httptrace
+
+springdoc:
+  packages-to-scan:
+    - io.backoffice
+---
+spring:
+  config:
+    activate:
+      on-profile: default
+  datasource:
+    url: jdbc:h2:mem:db1;MODE=MySql;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+    driverClassName: org.h2.Driver
+  h2:
+    console:
+      enabled: true
+  jpa:
+    database: mysql
+    hibernate:
+      ddl-auto: create
+#    properties:
+#      hibernate:
+#        hbm2ddl.import_files: 'classpath:init.sql'
+---
+spring:
+  config:
+    activate:
+      on-profile: prd
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
