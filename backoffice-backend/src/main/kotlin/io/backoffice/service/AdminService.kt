@@ -11,7 +11,7 @@ import org.springframework.web.server.ResponseStatusException
 
 @Service
 @Transactional
-class AdminService(
+class AdminService (
     private val adminRepository: AdminRepository,
     private val adminResConverter: AdminResConverter,
 ) {
