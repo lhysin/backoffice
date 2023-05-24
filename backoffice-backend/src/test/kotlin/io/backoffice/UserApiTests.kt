@@ -11,7 +11,7 @@ private val logger = KotlinLogging.logger {}
 @SpringBootTest(
     classes = [BackOfficeApplication::class],
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class AdminApiTests (
+class UserApiTests (
 
     @Autowired
     var webTestClient: WebTestClient,
@@ -21,7 +21,7 @@ class AdminApiTests (
     fun adminApiTest() {
 
         webTestClient.get()
-            .uri("/api/v1/admins")
+            .uri("/api/v1/users")
             .exchange()
             .expectStatus()
             .isOk()

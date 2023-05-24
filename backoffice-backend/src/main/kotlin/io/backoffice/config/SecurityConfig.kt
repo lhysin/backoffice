@@ -1,34 +1,38 @@
 package io.backoffice.config
 
+import io.backoffice.common.filter.JwtRequestFilter
+import io.backoffice.domain.auth.service.UserService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.security.authentication.AuthenticationProvider
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.config.annotation.web.builders.WebSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig () {
+class SecurityConfig (
+    private val userService: UserService,
+    private val jwtRequestFilter: JwtRequestFilter,
+) {
 
     @Bean
-    fun configure(): WebSecurityCustomizer? {
-        return WebSecurityCustomizer { web: WebSecurity ->
-            web.ignoring()
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**")
-                .requestMatchers("/actuator/**")
-
-        }
+    fun passwordEncoder() : PasswordEncoder {
+        return BCryptPasswordEncoder()
     }
 
     @Bean
-    fun passwordEncoder(): PasswordEncoder {
-        return BCryptPasswordEncoder()
+    fun authenticationProvider(): AuthenticationProvider {
+        val authenticationProvider = DaoAuthenticationProvider()
+        authenticationProvider.setUserDetailsService(userService)
+        authenticationProvider.setPasswordEncoder(passwordEncoder())
+        return authenticationProvider
     }
 
     @Bean
@@ -40,18 +44,20 @@ class SecurityConfig () {
             .httpBasic().disable()
 
             .authorizeHttpRequests()
-            .requestMatchers("/api/login").permitAll()
 
-            .and()
-            .authorizeHttpRequests()
-            .anyRequest()
-            .authenticated()
+            .requestMatchers("/api/v1/auth/login").permitAll()
+            .requestMatchers("/api/v1/auth/refresh").permitAll()
+            .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/actuator/**").permitAll()
+
+            .anyRequest().authenticated()
 
             .and()
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-
             .and()
+                .authenticationProvider(authenticationProvider())
+
+            .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter::class.java)
             .build()
     }
 }
