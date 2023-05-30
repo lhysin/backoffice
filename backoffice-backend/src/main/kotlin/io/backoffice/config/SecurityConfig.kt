@@ -39,6 +39,8 @@ class SecurityConfig (
     fun filterChain(http : HttpSecurity) : SecurityFilterChain {
         return http
 
+            .cors()
+            .and()
             .csrf().disable()
             .formLogin().disable()
             .httpBasic().disable()

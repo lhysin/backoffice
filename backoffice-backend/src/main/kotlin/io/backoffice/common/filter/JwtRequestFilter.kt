@@ -27,7 +27,7 @@ class JwtRequestFilter (
             ?.removePrefix("Bearer ")
             ?.trim()
 
-        if (!token.isNullOrEmpty() && jwtTokenProvider.isTokenExpired(token)) {
+        if (!token.isNullOrEmpty()) {
 
             val userDetails = userService.loadUserByUsername(
                 jwtTokenProvider.extractUserIdFromToken(token)

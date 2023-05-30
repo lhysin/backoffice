@@ -4,15 +4,21 @@ import io.backoffice.common.provider.JwtTokenProvider
 import io.backoffice.domain.auth.model.form.LoginForm
 import io.backoffice.domain.auth.model.form.RefreshTokenForm
 import io.backoffice.domain.auth.model.res.TokenRes
+import io.backoffice.domain.auth.model.res.UserRes
+import io.backoffice.domain.auth.service.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
+import java.util.*
 
 @RestController
 @RequestMapping("/api/v1/auth")
 class AuthController(
+    private val userService: UserService,
     private val authenticationProvider: AuthenticationProvider,
     private val jwtTokenProvider: JwtTokenProvider
 ) {
@@ -37,15 +43,18 @@ class AuthController(
     @PostMapping("/refresh")
     fun refresh(@RequestBody refreshTokenForm: RefreshTokenForm): TokenRes {
 
-        if(jwtTokenProvider.isTokenExpired(refreshTokenForm.refreshToken)) {
-            throw ResponseStatusException(HttpStatus.UNAUTHORIZED)
-        }
-
         val userId = jwtTokenProvider.extractUserIdFromToken(refreshTokenForm.refreshToken)
 
         return TokenRes(
             jwtTokenProvider.generateAccessTokenByUserId(userId),
             jwtTokenProvider.generateRefreshTokenByUserId(userId)
         )
+    }
+
+    @GetMapping("/me")
+    fun me(): UserRes {
+        val principal = SecurityContextHolder.getContext().authentication
+            .principal as UserDetails
+        return userService.findUserResById(principal.username)
     }
 }

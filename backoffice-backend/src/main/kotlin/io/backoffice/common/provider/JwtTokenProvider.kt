@@ -1,6 +1,5 @@
 package io.backoffice.common.provider
 
-import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
@@ -40,26 +39,33 @@ class JwtTokenProvider {
             .compact()
     }
 
-    fun extractUserIdFromToken(token: String): String {
-        return extractClaims(token).subject
-    }
+    @Throws(ResponseStatusException::class)
+    fun extractUserIdFromToken(token: String) : String {
 
-    fun isTokenExpired(token: String): Boolean {
-        val expirationDate = extractClaims(token).expiration
-        return expirationDate.before(Date())
-    }
+        return try {
 
-    fun extractClaims(token: String): Claims {
-        try {
-            return Jwts.parserBuilder()
+            if(token.isEmpty()) {
+                throw ResponseStatusException(HttpStatus.UNAUTHORIZED)
+            }
+
+            val claims = Jwts.parserBuilder()
                 .setSigningKey(secretKey)
                 .build()
                 .parseClaimsJws(token)
                 .body
+
+            val expirationDate = claims.expiration
+
+            if (expirationDate.before(Date())) {
+                throw ResponseStatusException(HttpStatus.UNAUTHORIZED)
+            }
+
+            claims.subject
         } catch (e: Exception) {
             logger.error(e.message)
-            throw ResponseStatusException(HttpStatus.FORBIDDEN)
+            throw ResponseStatusException(HttpStatus.UNAUTHORIZED)
         }
     }
+
 
 }
