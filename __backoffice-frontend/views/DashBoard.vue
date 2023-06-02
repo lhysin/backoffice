@@ -3,7 +3,6 @@
     <h2>DashBoard</h2>
 
     <button @click="logout">logout</button>
-    <button @click="me">me</button>
 
     <h4>/api/v1/auth/me</h4>
     <pre>{{ loginUser }}</pre>
@@ -23,29 +22,24 @@ export default {
     const router = useRouter();
     const loginUser = computed(() =>
       JSON.stringify(
-        store.getters['auth/loginStore/getLoginUser'],
+        store.getters['loginUserModule/loginUser'],
         null,
         4
       )
     )
 
+    onMounted(() => {
+      store.dispatch('loginUserModule/me');
+    });
+
     const logout = () => {
-      store.dispatch('auth/loginStore/logout');
+      store.dispatch('loginUserModule/logout');
       router.push('/login');
     }
 
-    const me = () => {
-      store.dispatch('auth/loginStore/me');
-    }
-
-    onMounted(() => {
-      me();
-    });
-
     return {
       loginUser,
-      logout,
-      me
+      logout
     };
   }
 };
