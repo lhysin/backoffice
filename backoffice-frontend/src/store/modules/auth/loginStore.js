@@ -1,4 +1,4 @@
-import store from '@/store/index.js';
+import store from '@/store';
 import axios from "@/plugins/axios.js";
 
 const state = {

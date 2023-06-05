@@ -19,5 +19,9 @@ npm run dev
 npm run build
 ```
 
+### You can then access
+-------------------
+http://localhost:5173
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).

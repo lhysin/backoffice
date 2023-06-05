@@ -55,19 +55,18 @@ instance.interceptors.response.use(
             return instance(error.config);
           } catch (refreshError) {
             // refresh 토큰이 만료된 경우, 로그인 페이지로 이동합니다.
-            store.dispatch('auth/loginStore/logout')
-            router.push('/login');
+            await store.dispatch('auth/loginStore/logout')
+            await router.push('/login');
           }
         } else {
           // 토큰이 만료된 경우, 로그인 페이지로 이동
-          router.push('/login');
+          await router.push('/login');
         }
       } else if (status === 403) {
         // 권한이 부족한 경우, 얼럿을 표시
         alert('권한이 부족합니다.');
 
-        store.dispatch('auth/loginStore/logout')
-        router.push('/login');
+        await router.push('/logout');
       }
     }
     return Promise.reject(error);

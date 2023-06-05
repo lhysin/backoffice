@@ -19,3 +19,4 @@ gradlew.bat clean build && gradlew.bat :bootRun
 You can then access
 -------------------
 http://localhost:8880/swagger-ui/index.html
+http://localhost:8880/h2-console

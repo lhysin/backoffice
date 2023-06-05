@@ -14,6 +14,7 @@
     "vue": "^3.2.47",
     "vue-router": "^4.2.2",
     "vuex": "^4.1.0",
+    "vuex-extensions": "^4.0.0",
     "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {

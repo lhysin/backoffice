@@ -8,7 +8,8 @@ spring:
 
 logging:
   level:
-    org.springframework.data: warn
+    org.springframework.data: debug
+    org.springframework.security: debug
     h2: debug
     io.backoffice: debug
 
@@ -40,6 +41,7 @@ spring:
   h2:
     console:
       enabled: true
+      path: /h2-console
   jpa:
     database: mysql
     hibernate:

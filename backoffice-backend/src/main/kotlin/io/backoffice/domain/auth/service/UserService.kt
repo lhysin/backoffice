@@ -3,6 +3,7 @@ package io.backoffice.domain.auth.service
 import io.backoffice.domain.auth.converter.UserResConverter
 import io.backoffice.domain.auth.model.entity.User
 import io.backoffice.domain.auth.model.res.UserRes
+import io.backoffice.domain.auth.model.type.UserRole
 import io.backoffice.domain.auth.repository.UserRepository
 import jakarta.persistence.EntityNotFoundException
 import jakarta.transaction.Transactional
@@ -30,8 +31,8 @@ class UserService (
             .let { userResConverter.convert(it) }
     }
 
-    fun findUserResAll(): List<UserRes> {
-        return userRepository.findAll()
+    fun findAllWithoutAdmin(): List<UserRes> {
+        return userRepository.findByUserRole(UserRole.NORMAL)
             .map { userResConverter.convert(it) }
     }
 

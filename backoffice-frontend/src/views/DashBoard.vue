@@ -2,7 +2,6 @@
   <div>
     <h2>DashBoard</h2>
 
-    <button @click="logout">logout</button>
     <button @click="me">me</button>
 
     <h4>/api/v1/auth/me</h4>
@@ -29,11 +28,6 @@ export default {
       )
     )
 
-    const logout = () => {
-      store.dispatch('auth/loginStore/logout');
-      router.push('/login');
-    }
-
     const me = () => {
       store.dispatch('auth/loginStore/me');
     }
@@ -44,7 +38,6 @@ export default {
 
     return {
       loginUser,
-      logout,
       me
     };
   }

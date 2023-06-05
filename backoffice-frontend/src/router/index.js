@@ -1,23 +1,21 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import store from '@/store';
+import { useStore } from 'vuex';
+import layoutRouter from "@/router/layoutRouter.js";
 
 const routes = [
-  // 공개 페이지
   {
     path: '/login',
-    name : 'Login',
+    name : 'TheLogin',
     component: () => import('@/views/TheLogin.vue'),
     meta: {
       isPublic : true
     }
+  },  {
+    path: '/logout',
+    name : 'TheLogout',
+    component: () => import('@/views/TheLogout.vue'),
   },
-
-  {
-    path: '/',
-    name: 'DashBoard',
-    component: () => import('@/views/DashBoard.vue'),
-  },
-
   {
     path: '/:pathMatch(.*)*',
     name: 'ErrorView',
@@ -34,6 +32,18 @@ router.beforeEach((to, from, next) => {
   const hasAccessToken = store.getters['auth/tokenStore/hasAccessToken'];
   const isPublic = to.meta.isPublic;
 
+  // store reset
+  useStore().reset({
+    modules: {
+      'auth/tokenStore': {
+        self: false,
+      },
+      'auth/loginStore': {
+        self: false,
+      },
+    },
+  });
+
   if (isPublic && hasAccessToken) {
     next('/');
   } else if (!isPublic && !hasAccessToken) {
@@ -42,5 +52,14 @@ router.beforeEach((to, from, next) => {
     next();
   }
 });
+
+const layoutRoute = {
+  path: '/',
+  name: 'Layout',
+  component: () => import('@/components/layout/TheLayout.vue'),
+  children: layoutRouter,
+};
+
+router.addRoute(layoutRoute);
 
 export default router;

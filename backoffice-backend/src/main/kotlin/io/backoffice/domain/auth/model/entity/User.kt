@@ -41,7 +41,7 @@ class User (
 
     @Column(nullable = true)
     @CreatedDate
-    var createdDate: LocalDateTime? = null,
+    var createdDate: LocalDateTime = LocalDateTime.now(),
 
     @Column(nullable = true)
     @LastModifiedBy
