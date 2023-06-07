@@ -3,7 +3,7 @@ import router from '@/router';
 import store from '@/store';
 
 const config = {
-  baseURL: import.meta.env.BACKOFFICE_BACKEND_HOST,
+  baseURL: import.meta.env.VITE_BACKOFFICE_BACKEND_HOST,
   timeout: 300 * 1000, // Timeout
   withCredentials: true, // Check cross-site Access-Control
   headers: {
@@ -45,25 +45,25 @@ instance.interceptors.response.use(
             // refresh 토큰을 서버로 보내서 새로운 토큰 생성
             const refreshResponse = await axios.post('/refresh', { refreshToken });
 
-            // 새로운 토큰을 Vuex에 저장합니다.
+            // 새로운 토큰을 Vuex에 저장.
             store.commit('auth/tokenStore/saveToken', {
               accessToken: refreshResponse.data.accessToken,
               refreshToken: refreshResponse.data.refreshToken
             });
 
-            // 원래 요청을 그대로 복구하여 진행
+            // 원래 요청을 그대로 복구하여 진행.
             return instance(error.config);
           } catch (refreshError) {
-            // refresh 토큰이 만료된 경우, 로그인 페이지로 이동합니다.
+            // refresh 토큰이 만료된 경우, 로그인 페이지로 이동.
             await store.dispatch('auth/loginStore/logout')
             await router.push('/login');
           }
         } else {
-          // 토큰이 만료된 경우, 로그인 페이지로 이동
+          // 토큰이 만료된 경우, 로그인 페이지로 이동.
           await router.push('/login');
         }
       } else if (status === 403) {
-        // 권한이 부족한 경우, 얼럿을 표시
+        // 권한이 부족한 경우, 얼럿을 표시.
         alert('권한이 부족합니다.');
 
         await router.push('/logout');
