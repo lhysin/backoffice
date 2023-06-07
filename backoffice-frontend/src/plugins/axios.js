@@ -7,9 +7,9 @@ const config = {
   timeout: 300 * 1000, // Timeout
   withCredentials: true, // Check cross-site Access-Control
   headers: {
-    common: {
-      'Access-Control-Allow-Origin': '*'
-    },
+    // common: {
+    //   'Access-Control-Allow-Origin': '*'
+    // },
     post: {
       'Content-Type': 'application/json',
     },
