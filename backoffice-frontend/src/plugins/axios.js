@@ -5,7 +5,10 @@ import store from '@/store';
 const config = {
   baseURL: import.meta.env.VITE_BACKOFFICE_BACKEND_HOST,
   timeout: 300 * 1000, // Timeout
-  withCredentials: true, // Check cross-site Access-Control
+
+  // allow 'Access-Control-Allow-Origin': '*'
+  withCredentials: false,
+
   headers: {
     // common: {
     //   'Access-Control-Allow-Origin': '*'
