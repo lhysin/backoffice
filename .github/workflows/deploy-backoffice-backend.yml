@@ -63,7 +63,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             docker stop backoffice-backend
-            docker rm -f backoffice-backend
+            docker image rm -f lhysin/backoffice-backend
             docker pull lhysin/backoffice-backend:latest
             docker run -d -p 8880:8880 --name backoffice-backend \
             -e SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }} \
