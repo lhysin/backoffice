@@ -69,6 +69,6 @@ jobs:
             -e SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }} \
             -e SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }} \
             -e SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }} \
-            -e SPRING_PROFILES_ACTIVE=DEVELOPMENT \
+            -e SPRING_PROFILES_ACTIVE=PRODUCTION \
             -e loki.push-server=${{ secrets.LOKI_PUSH_SERVER }} \
-						lhysin/backoffice-backend:latest
+	    lhysin/backoffice-backend:latest
