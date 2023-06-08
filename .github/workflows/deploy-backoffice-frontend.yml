@@ -54,8 +54,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             docker stop backoffice-frontend
-            docker rm -f backoffice-frontend
+            docker image rm -f lhysin/backoffice-frontend
             docker pull lhysin/backoffice-frontend:latest
             docker run -d -p 8980:80 --name backoffice-frontend \
-            -e NODE_ENV=development \
+            -e NODE_ENV=production \
             lhysin/backoffice-frontend:latest
